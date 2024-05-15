@@ -1,0 +1,16 @@
+---
+import type {AgilityPageProps} from "../lib/agility-cms/types/agility-page-props"
+import AgilityComponent from "./AgilityComponent.astro"
+
+interface Props {
+	name: string
+	pageResponse: AgilityPageProps
+}
+
+const {pageResponse, name} = Astro.props
+const {page, sitemapNode} = pageResponse
+
+const modules = page.zones[name]
+---
+
+{modules.map((zone, index) => <AgilityComponent name={zone.module} item={zone.item} pageResponse={pageResponse} />)}

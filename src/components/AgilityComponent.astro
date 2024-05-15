@@ -1,0 +1,22 @@
+---
+import type {ContentItem, ContentReference} from "@agility/content-fetch"
+import type {AgilityPageProps} from "../lib/agility-cms/types/agility-page-props"
+import type {AgilityComponentProps} from "../lib/agility-cms/types/agility-component-props"
+import RichTextArea from "./agility-components/RichTextArea.astro"
+
+interface Props extends AgilityComponentProps {}
+
+const {item, name, pageResponse} = Astro.props
+
+let TheComponent: ((_props: Props) => any) | null
+
+switch (name) {
+	case "RichTextArea":
+		TheComponent = RichTextArea
+		break
+	default:
+		TheComponent = null
+}
+---
+
+{TheComponent && <TheComponent item={item} name={name} pageResponse={pageResponse} />}

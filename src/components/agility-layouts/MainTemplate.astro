@@ -1,0 +1,12 @@
+---
+import type {AgilityPageProps} from "../../lib/agility-cms/types/agility-page-props"
+import ContentZone from "../ContentZone.astro"
+
+interface Props {
+	pageResponse: AgilityPageProps
+}
+
+const {pageResponse} = Astro.props
+---
+
+<ContentZone name="MainContentZone" pageResponse={pageResponse} />

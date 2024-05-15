@@ -1,0 +1,37 @@
+---
+import type {AgilityPageProps} from "../lib/agility-cms/types/agility-page-props"
+
+import MainTemplate from "../components/agility-layouts/MainTemplate.astro"
+
+interface Props {
+	pageResponse: AgilityPageProps
+}
+
+const {pageResponse} = Astro.props
+const {page, sitemapNode} = pageResponse
+
+//get the correct template
+const Template = page.templateName === "Main Template" ? MainTemplate : null
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{sitemapNode.title}</title>
+		<meta name="description" content={page.seo?.metaDescription} />
+	</head>
+	<body>
+		<slot />
+
+		<header>HEADER</header>
+
+		{Template && <Template pageResponse={pageResponse} />}
+
+		<footer>FOOTER</footer>
+	</body>
+</html>

@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {getPage} from '../lib/agility-cms/get-page';
+const { slug } = Astro.params;
+
+const pageResponse = await getPage({slug});
+
+// Set Cache-Control headers for CDN caching
+//cache the page for 60 seconds, and allow stale content for 30 seconds
+Astro.response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=30');
+
+
+if (!pageResponse) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not found'
+  });
+}
+
+---
+<Layout pageResponse={pageResponse}/>

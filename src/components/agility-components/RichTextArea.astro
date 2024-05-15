@@ -1,0 +1,28 @@
+---
+import type {ContentItem} from "@agility/content-fetch"
+import type {AgilityPageProps} from "../../lib/agility-cms/types/agility-page-props"
+import type {AgilityComponentProps} from "../../lib/agility-cms/types/agility-component-props"
+
+interface RichText {
+	textblob: string
+}
+interface Props extends AgilityComponentProps {}
+
+const {item} = Astro.props
+
+const {
+	contentID,
+	fields: {textblob},
+} = item as ContentItem<RichText>
+---
+
+<section id={`${contentID}`} class="relative px-8" data-agility-component={contentID}>
+	<div class="max-w-2xl mx-auto my-12 md:mt-18 lg:mt-20">
+		<div
+			data-agility-field="textblob"
+			data-agility-html
+			class="my-6 prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-full"
+			set:html={textblob}
+		/>
+	</div>
+</section>
