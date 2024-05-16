@@ -7,9 +7,12 @@ export const handlePreview = async (Astro: Readonly<AstroGlobal>) => {
 
 	const config = getAgilityConfig()
 
+
+
 	//check for for EXITING preview mode
 	const AgilityPreviewZero = Astro.url.searchParams.get('AgilityPreview') || '';
 	if (AgilityPreviewZero === '0') {
+		console.log("KICKING OUT OF PREVIEW MODE")
 		//remove the cookie and redirect to the same slug
 		Astro.cookies.delete("agilitypreview")
 		return Astro.url.pathname
@@ -20,10 +23,16 @@ export const handlePreview = async (Astro: Readonly<AstroGlobal>) => {
 	const contentIDStr = Astro.url.searchParams.get('ContentID') || Astro.url.searchParams.get('contentID');
 
 
+
 	if (!agilityPreviewKey) {
+		console.log("NO PREVIEW KEY")
 		//kickout if we don't have a preview key
 		return false;
 	}
+
+	console.log("HANDLE PREVIEW", Astro.url.pathname)
+	console.log("agilityPreviewKey", agilityPreviewKey)
+	console.log("contentIDStr", contentIDStr)
 
 	//validate the preview key, set the cookie and redirect to the same slug
 	const ret = validatePreview({ agilityPreviewKey });
@@ -32,14 +41,11 @@ export const handlePreview = async (Astro: Readonly<AstroGlobal>) => {
 		return false;
 	}
 
+	console.log("setting the preview cookie...")
+
 	//if we get this far, we are kicking them INTO preview mode!
 	Astro.cookies.set("agilitypreview", "true")
 
-	//remove the preview stuff from the URL and redirect them...
-	const params = new URLSearchParams(Astro.url.href)
-	params.delete("agilitypreviewkey")
-	params.delete("agilityts")
-	params.delete("AgilityChannelID")
 
 	let slug = Astro.url.pathname
 
@@ -69,6 +75,7 @@ export const handlePreview = async (Astro: Readonly<AstroGlobal>) => {
 
 	}
 
+	console.log("REDIRECTING TO", slug)
 
 	//return the slug we are going to redirect to
 	return slug
