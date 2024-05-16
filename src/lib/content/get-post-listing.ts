@@ -22,7 +22,7 @@ interface LoadPostsProp {
 	take: number
 }
 
-export const getPostListing = async ({ sitemap, locale, isPreview, skip, take }: LoadPostsProp) => {
+export const getPostListing = async ({ sitemap, locale, isPreview, skip: _skip, take: _take }: LoadPostsProp) => {
 
 
 	//HACK: we are ignoring skip and take for now just to show how to use the CMS data
@@ -58,11 +58,6 @@ export const getPostListing = async ({ sitemap, locale, isPreview, skip, take }:
 			// url
 			const url = dynamicUrls[post.contentID] || "#"
 
-			// post image src
-			let imageSrc = post.fields.image.url
-
-			// post image alt
-			let imageAlt = post.fields.image?.label || null
 
 			return {
 				contentID: post.contentID,

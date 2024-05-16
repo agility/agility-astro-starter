@@ -1,6 +1,7 @@
 
 
 import * as crypto from 'crypto'
+import { Buffer } from 'buffer';
 
 
 export const generatePreviewKey = (securityKey: string) => {

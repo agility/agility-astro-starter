@@ -27,6 +27,7 @@
     "@agility/content-fetch": "^2.0.0",
     "@tailwindcss/typography": "^0.5.13",
     "@types/luxon": "^3.4.2",
+    "@types/node": "^20.12.12",
     "luxon": "^3.4.4",
     "react-infinite-scroll-component": "^6.1.0",
     "string-strip-html": "^13.4.8"
