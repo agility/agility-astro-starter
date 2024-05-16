@@ -78,5 +78,5 @@ export const handlePreview = async (Astro: Readonly<AstroGlobal>) => {
 	console.log("REDIRECTING TO", slug)
 
 	//return the slug we are going to redirect to
-	return slug
+	return `${slug}?AgilityPreview=1`
 };
