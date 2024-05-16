@@ -15,6 +15,9 @@ const isPreviewCookieSet = (previewCookie?.value || "") === "true"
 
 const pageResponse = await getPage({slug, isPreviewCookieSet})
 
+//ONLY FOR NETLIFY - we need to set the vary header to include the query string and the preview cookie
+Astro.response.headers.set("Netlify-Vary", "query,cookie=agilitypreview")
+
 if (!pageResponse) {
 	//404 - cache for 60 seconds
 	Astro.response.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=30")
