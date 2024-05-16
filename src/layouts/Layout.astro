@@ -1,17 +1,23 @@
 ---
-import type {AgilityPageProps} from "../lib/agility-cms/types/agility-page-props"
-
 import MainTemplate from "../components/agility-layouts/MainTemplate.astro"
+import SiteHeader from "../components/react/SiteHeader"
+import SiteFooter from "../components/react/SiteFooter"
+import PreviewBar from "../components/react/PreviewBar"
+import {getHeaderContent} from "../lib/content/get-header-content"
+import type {AgilityPageProps} from "../lib/agility-cms/types/agility-page-props"
 
 interface Props {
 	pageResponse: AgilityPageProps
 }
 
 const {pageResponse} = Astro.props
-const {page, sitemapNode} = pageResponse
+const {page, sitemapNode, isPreview, languageCode, channelName, isDevelopmentMode} = pageResponse
 
 //get the correct template
 const Template = page.templateName === "Main Template" ? MainTemplate : null
+
+//get the header data
+const headerData = await getHeaderContent({isPreview, locale: languageCode, sitemap: channelName})
 ---
 
 <!doctype html>
@@ -20,18 +26,21 @@ const Template = page.templateName === "Main Template" ? MainTemplate : null
 		<meta charset="UTF-8" />
 		<meta name="description" content="Astro description" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
+		<link rel="icon" type="image/svg+xml" href="/assets/agility-logo-triangle.svg" />
+		<meta name="generator" content={`Agility CMS + ${Astro.generator}`} />
 		<title>{sitemapNode.title}</title>
 		<meta name="description" content={page.seo?.metaDescription} />
 	</head>
 	<body>
-		<slot />
+		<div class="flex flex-col min-h-screen">
+			<PreviewBar client:load {...{isDevelopmentMode, isPreview}} />
 
-		<header>HEADER</header>
+			<SiteHeader client:load header={headerData} />
+			<main class="flex-1">
+				{Template && <Template pageResponse={pageResponse} />}
+			</main>
 
-		{Template && <Template pageResponse={pageResponse} />}
-
-		<footer>FOOTER</footer>
+			<SiteFooter />
+		</div>
 	</body>
 </html>

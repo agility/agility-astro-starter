@@ -1,20 +1,34 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import {getPage} from '../lib/agility-cms/get-page';
+import Layout from "../layouts/Layout.astro"
+import {getPage} from "../lib/agility-cms/get-page"
+import {handlePreview} from "../lib/agility-cms/handle-preview"
 
-const pageResponse = await getPage({slug: ""});
-
-// Set Cache-Control headers for CDN caching
-//cache the page for 60 seconds, and allow stale content for 30 seconds
-Astro.response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=30');
-
-
-if (!pageResponse) {
-  return new Response(null, {
-    status: 404,
-    statusText: 'Not found'
-  });
+const previewSlug = await handlePreview(Astro)
+if (previewSlug) {
+	//if we kicking into preview mode, we don't need to render the rest of the page (since we are redirecting)
+	return Astro.redirect(previewSlug, 302)
 }
 
+const previewCookie = Astro.cookies.get("agilitypreview")
+const isPreviewCookieSet = (previewCookie?.value || "") === "true"
+
+const pageResponse = await getPage({slug: "", isPreviewCookieSet})
+
+if (!pageResponse) {
+	//404 - cache for 60 seconds
+	Astro.response.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=30")
+
+	return new Response(null, {
+		status: 404,
+		statusText: "Not found",
+	})
+}
+
+if (!pageResponse.isPreview) {
+	//Do not cache in preview mode ;)
+	//cache the page for 60 seconds, and allow stale content for 30 seconds
+	Astro.response.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=30")
+}
 ---
-<Layout pageResponse={pageResponse}/>
+
+<Layout pageResponse={pageResponse} />

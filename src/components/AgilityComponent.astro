@@ -1,8 +1,12 @@
 ---
-import type {ContentItem, ContentReference} from "@agility/content-fetch"
-import type {AgilityPageProps} from "../lib/agility-cms/types/agility-page-props"
 import type {AgilityComponentProps} from "../lib/agility-cms/types/agility-component-props"
+
 import RichTextArea from "./agility-components/RichTextArea.astro"
+import TextBlockWithImage from "./agility-components/TextBlockWithImage.astro"
+import Heading from "./agility-components/Heading.astro"
+import FeaturedPost from "./agility-components/FeaturedPost.astro"
+import PostListing from "./agility-components/posts-listing/PostListing.astro"
+import PostDetails from "./agility-components/PostDetails.astro"
 
 interface Props extends AgilityComponentProps {}
 
@@ -14,6 +18,22 @@ switch (name) {
 	case "RichTextArea":
 		TheComponent = RichTextArea
 		break
+	case "TextBlockWithImage":
+		TheComponent = TextBlockWithImage
+		break
+	case "Heading":
+		TheComponent = Heading
+		break
+	case "FeaturedPost":
+		TheComponent = FeaturedPost
+		break
+	case "PostsListing":
+		TheComponent = PostListing
+		break
+	case "PostDetails":
+		TheComponent = PostDetails
+		break
+
 	default:
 		TheComponent = null
 }

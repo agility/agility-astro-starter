@@ -6,8 +6,8 @@ export interface AgilityPageProps {
 	page: Page;
 	dynamicPageItem: ContentItem | null;
 	pageTemplateName: string | null;
-	languageCode: string | null;
-	channelName: string | null;
+	languageCode: string;
+	channelName: string;
 	isPreview: boolean;
 	isDevelopmentMode: boolean;
 

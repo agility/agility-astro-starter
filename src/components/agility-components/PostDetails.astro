@@ -1,0 +1,47 @@
+---
+import {DateTime} from "luxon"
+import type {AgilityComponentProps} from "../../lib/agility-cms/types/agility-component-props"
+import AgilityPic from "../AgilityPic.astro"
+
+interface Props extends AgilityComponentProps {}
+
+const {
+	pageResponse: {dynamicPageItem, channelName, isPreview, languageCode},
+} = Astro.props
+
+if (!dynamicPageItem) return null
+
+// post fields
+const post = dynamicPageItem.fields
+
+// category
+const category = post.category?.fields.title || "Uncategorized"
+
+// format date
+const dateStr = DateTime.fromJSDate(new Date(post.date)).toFormat("LLL. dd, yyyy")
+---
+
+<div class="relative px-8">
+	<div class="max-w-screen-xl mx-auto">
+		<div class="h-64 md:h-96 lg:h-[480px] relative overflow-hidden rounded-lg">
+			<AgilityPic
+				image={post.image}
+				alt={post.image.label}
+				className="w-full"
+				fallbackWidth={800}
+				sources={[
+					{media: "(min-width: 1280px)", width: 1200},
+					{media: "(min-width: 640px)", width: 800},
+					{media: "(max-width: 639px)", width: 640},
+				]}
+			/>
+		</div>
+		<div class="max-w-2xl mx-auto mt-4">
+			<div class="uppercase text-primary-500 text-xs font-bold tracking-widest leading-loose">{category}</div>
+			<div class="border-b-2 border-primary-500 w-8"></div>
+			<div class="mt-4 uppercase text-gray-600 italic font-semibold text-xs">{dateStr}</div>
+			<h1 class="font-display text-4xl font-bold my-6 text-secondary-500">{post.title}</h1>
+			<div class="prose max-w-full mb-20" set:html={post.content} />
+		</div>
+	</div>
+</div>

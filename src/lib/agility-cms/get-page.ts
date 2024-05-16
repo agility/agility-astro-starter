@@ -9,6 +9,7 @@ import type { AgilityPageProps } from "./types/agility-page-props";
 
 interface Props {
 	slug: string | undefined
+	isPreviewCookieSet: boolean
 }
 
 
@@ -17,15 +18,15 @@ interface Props {
  * @param param0
  * @returns
  */
-export const getPage = async ({ slug }: Props): Promise<AgilityPageProps | null> => {
+export const getPage = async ({ slug, isPreviewCookieSet }: Props): Promise<AgilityPageProps | null> => {
 
 	const agilityConfig = getAgilityConfig()
 
 	const channelName = agilityConfig.channelName
-	const isDevelopmentMode = process.env.NODE_ENV === "development";
+	const isDevelopmentMode = false //process.env.NODE_ENV === "development";
 
 	//TODO: handle preview mode with a cookie
-	const isPreview = isDevelopmentMode || false
+	const isPreview = isPreviewCookieSet //HACK isDevelopmentMode || isPreviewCookieSet
 
 	//TODO: derive the language code from the request slug
 	const languageCode = agilityConfig.locales[0]
@@ -59,7 +60,8 @@ export const getPage = async ({ slug }: Props): Promise<AgilityPageProps | null>
 	//get the full page object
 	const page = await agilityRestClient.getPage({
 		pageID: sitemapNode.pageID,
-		languageCode
+		languageCode,
+		contentLinkDepth: 1
 	})
 
 	let dynamicPageItem: ContentItem | null = null
