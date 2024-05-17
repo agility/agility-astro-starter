@@ -25,8 +25,8 @@ export const getPage = async ({ slug, isPreviewCookieSet }: Props): Promise<Agil
 	const channelName = agilityConfig.channelName
 	const isDevelopmentMode = false //process.env.NODE_ENV === "development";
 
-	//TODO: handle preview mode with a cookie
-	const isPreview = isPreviewCookieSet //HACK isDevelopmentMode || isPreviewCookieSet
+	//check if we are in preview mode
+	const isPreview = isDevelopmentMode || isPreviewCookieSet
 
 	//TODO: derive the language code from the request slug
 	const languageCode = agilityConfig.locales[0]
